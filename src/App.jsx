@@ -3,7 +3,7 @@ import './App.css'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import { Provider } from 'react-redux'
-import store from './store/index'
+import {store} from './store/index'
 import PublicRoutes from './utils/PublicRoutes'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 
