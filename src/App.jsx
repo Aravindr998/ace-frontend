@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import './App.css'
-import LoginPage from './pages/LoginPage'
+import LoginPage from './LoginPage'
 import HomePage from './pages/HomePage'
 import { Provider } from 'react-redux'
 import {store} from './store/index'

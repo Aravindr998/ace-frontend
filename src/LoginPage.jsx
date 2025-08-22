@@ -1,9 +1,9 @@
 import {useState} from 'react'
 import { useSelector,useDispatch } from 'react-redux'
-import { setLoginData } from '../store/slices/loginSlice'
-import { setAuth } from '../store/slices/authSlice'
-import { loginForm } from '../../constant/login'
+import { setLoginData } from './store/slices/loginSlice'
+import { setAuth } from './store/slices/authSlice'
 import isEmpty from 'lodash/isEmpty'
+import { loginForm } from './constant/login'
 
 
 const LoginPage = () => {
@@ -88,7 +88,7 @@ const LoginPage = () => {
             
               default:
                 return (
-                  <div>
+                  <div key={key}>
                     <h1>{label}{required && <sup>*</sup>}</h1>
                     <input
                       name={type}
