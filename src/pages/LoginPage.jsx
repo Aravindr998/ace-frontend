@@ -2,20 +2,18 @@ import {useState} from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { setLoginData } from '../store/slices/loginSlice'
 import { setAuth } from '../store/slices/authSlice'
+import { loginForm } from '../../constant/login'
+import isEmpty from 'lodash/isEmpty'
 
 
 const LoginPage = () => {
-  const formData =useSelector((state)=>state.formData)
+  const formData =useSelector((state)=>state.login)
   const[error,setError]=useState({})
   const dispatch = useDispatch();
 
 
   const handleChange =(e)=>{
     const{name,value}=e.target
-    error[name] = ""
-    setError({
-      ...error,
-    })
     setError((prevState)=>{
       return{
         ...prevState,
@@ -24,53 +22,39 @@ const LoginPage = () => {
     })
     dispatch(
       setLoginData({
-        ...formData,
         [name]:value,
       })
     )
   }
 
   const validateForm =()=>{
-    let isValid=true
     const newErrors = {}
     const isEmail =(email) =>{
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
     }
     const strongPassword = /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/
     const isStrongPassword = (password)=> strongPassword.test(password)
-    const types = ["email","password"]
-    types.map((type)=>{
-      switch(type){
-        case "email":
-          if(!formData.email){
-            newErrors.email = "Email is required"
-            isValid = false
-          }else if(!isEmail(formData.email)){
-            newErrors.email="Please enter a valid email"
-            isValid = false
+    loginForm.map(({ key, label, required, type })=>{
+      if (required) {
+        if (!formData[key]) {
+          newErrors[key] = `${label} is required`
+        } else {
+          if (type === "email" && !isEmail(formData[key])) {
+            newErrors[key]="Please enter a valid email"
+          } else if (type === "password" && !isStrongPassword(formData[key])) {
+            formData[key] = "Password must be a minimum of 8 characters including number, Upper, Lower And one special character"
           }
-          break;
-        case "password":
-          if(!formData.password){
-            newErrors.password = "Password is required"
-            isValid = false
-          }else if(!isStrongPassword(formData.password)){
-            newErrors.password = "Password must be a minimum of 8 characters including number, Upper, Lower And one special character"
-            isValid = false
-            }
-          break;
-        default:
-          break;
+        }
       }
     })
-    setError(newErrors)
-    return isValid
+    return newErrors
   }
   
   const handleSubmit =(e)=>{ 
     const getFormData = localStorage.getItem("formData")
     e.preventDefault()
-    if(validateForm()){
+    const errors = validateForm()
+    if(isEmpty(errors)){
       if(getFormData && getFormData.length){
         const userData = JSON.parse(getFormData)
         if(userData.length>0){
@@ -88,7 +72,7 @@ const LoginPage = () => {
         }
       }
     }else{
-      console.log(error)
+      setError({...errors})
     }
 
   }
@@ -98,40 +82,34 @@ const LoginPage = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className='font-bold'>LOGIN</div>
-        <div>
-          <h1>Email</h1>
-          <input
-            name='email'
-            type='email'
-            placeholder='Email Address'
-            value={formData?.email}
-            onChange={handleChange}
+        {
+          loginForm.map(({ key, label, placeholder, required, type }) => {
+            switch (key) {
+            
+              default:
+                return (
+                  <div>
+                    <h1>{label}{required && <sup>*</sup>}</h1>
+                    <input
+                      name={type}
+                      type={type}
+                      placeholder={placeholder}
+                      value={formData?.[key]}
+                      onChange={handleChange}
 
-          />
-          {
-            error.email && (
-              <div>
-                {error.email}
-              </div>
-            )
-          }
-        </div>
-        <div>
-          <h1>Password</h1>
-          <input
-            name='password'
-            type='password'
-            placeholder='Password'
-            value={formData?.password}
-            onChange={handleChange}/>
-            {
-              error.password && (
-                <div>
-                  {error.password}
-                </div>
-              )
+                    />
+                    {
+                      error[key] && (
+                        <div>
+                          {error[key]}
+                        </div>
+                      )
+                    }
+                  </div>
+                )
             }
-        </div>
+          })
+        }
         <div>
           <button>LOGIN</button>
         </div>

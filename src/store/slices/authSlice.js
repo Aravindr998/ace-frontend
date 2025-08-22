@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    user: {}
+    user: null
 }
 
 const authSlice = createSlice({
@@ -11,7 +11,7 @@ const authSlice = createSlice({
         setAuth: (state, action) => {
             state.user = action.payload
         },
-        clearAuth: (state, action) => {
+        clearAuth: (state) => {
             state.user = {}
         }
     }

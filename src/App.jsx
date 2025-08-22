@@ -14,10 +14,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<PublicRoutes/>}>
-        <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Route>
         <Route element={<ProtectedRoutes/>}>
-        <Route path="/" element={<HomePage/>} />
+          <Route path="/" element={<HomePage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
