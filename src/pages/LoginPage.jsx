@@ -1,9 +1,9 @@
 import {useState} from 'react'
 import { useSelector,useDispatch } from 'react-redux'
-import { setLoginData } from './store/slices/loginSlice'
-import { setAuth } from './store/slices/authSlice'
+import { setLoginData } from '../store/slices/loginSlice'
+import { setAuth } from '../store/slices/authSlice'
 import isEmpty from 'lodash/isEmpty'
-import { loginForm } from './constant/login'
+import { loginForm } from '../constant/login'
 
 
 const LoginPage = () => {
