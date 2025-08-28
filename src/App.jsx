@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import {store} from './store/index'
 import PublicRoutes from './utils/PublicRoutes'
 import ProtectedRoutes from './utils/ProtectedRoutes'
+import SignupPage from './pages/SignupPage'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route element={<PublicRoutes/>}>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage/>} />
         </Route>
         <Route element={<ProtectedRoutes/>}>
           <Route path="/" element={<HomePage/>} />
