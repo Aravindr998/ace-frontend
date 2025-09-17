@@ -1,15 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { signupForm } from '../../constant/signup'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSignupData } from '../store/slices/registerSlice'
+
 
 
 
 const SignupPage = () => {
 
+  const formData = useSelector((state)=>state.register)
+  const dispatch = useDispatch()
+
+
+  console.log('formData', formData)
   const handleChange=(e)=>{
     const {name,value}=e.target
+    dispatch(
+      setSignupData({
+        [name]:value
+      })
+    )
   }
 
-  const handleClick=()=>{
-  console.log('clicked')
+  const validateForm=()=>{
+    console.log('first')
+    const isEmail = (email)=>{ /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)}
+    const isStrongPassword =(password)=>{/^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/.test(password)}
+    if(isEmail(formData?.email)){
+      alert('hi')
+      console.log('true')  
+    }else{
+      console.log('false')
+    }
+    if(isStrongPassword(formData?.password)){
+      alert('hi')
+      console.log('false');
+    }else{
+      console.log('true')
+    }
+  }
+
+  const handleClick=(e)=>{
+    console.log('first')
+     e.preventDefault()
+     validateForm()
+
   }
 
   return (
@@ -17,38 +52,22 @@ const SignupPage = () => {
       <form onSubmit={handleClick}>
         <div>SignUp</div>
         <div>
-          <h1>First Name</h1>
-          <input name='firstName' type='text' placeholder='First Name' onChange={handleChange}/>
-        </div>
-        <div>
-          <h1>Last Name</h1>
-          <input name='lastName' type='text' placeholder='Last Name' onChange={handleChange}/>
-        </div>
-        <div>
-          <h1>Email</h1>
-          <input name='email' type='email' placeholder='Email' onChange={handleChange}/>
-        </div>
-        <div>
-          <h1>Phone Number</h1>
-          <input name='phone' type='number' placeholder='Phone Number' onChange={handleChange}/>
-        </div>
-        <div>
-          <h1>Gender</h1>
-          <input name='gender' type='text' placeholder='Gender' onChange={handleChange}/>
-        </div>
-        <div>
-          <h1>Password</h1>
-          <input name='password' type='password' placeholder='Password' onChange={handleChange}/>
-        </div>
-        <div>
-          <h1>Confirm Password</h1>
-          <input name='confirmpassword' type='password' placeholder='Confirm Password' onChange={handleChange}/>
+          {
+            signupForm.map(({key, label, placeholder, required, type})=>{
+              return (
+              <> 
+              <h1>{label}</h1>
+              <input name={type} value={formData?.[key]}  type={type} placeholder={placeholder} label={label} onChange={handleChange} required/>
+              </>
+              )
+            })
+          }
         </div>
         <div>
           <button>Sign Up</button>
         </div>
         <div>
-          Already a Customer?<a href='/login'>Login</a>
+          <a href='/login'>Already a Customer?Login</a>
         </div>
       </form>
     </div>
